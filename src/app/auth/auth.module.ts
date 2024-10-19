@@ -9,6 +9,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login/login.component';
@@ -35,6 +36,7 @@ import { AuthFormComponent } from './auth-form/auth-form.component';
     NzFormModule,
     NzButtonModule,
     NzCheckboxModule,
+    NzAlertModule,
   ],
   providers: [AuthService],
 })

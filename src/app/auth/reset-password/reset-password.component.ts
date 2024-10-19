@@ -9,6 +9,8 @@ import { AuthService } from '../auth.service';
 })
 export class ResetPasswordComponent {
   resetPasswordForm!: FormGroup;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
@@ -17,6 +19,11 @@ export class ResetPasswordComponent {
       password: [null, [Validators.required]],
       passwordConfirm: [null, [Validators.required]],
     });
+
+    this.resetPasswordForm.valueChanges.subscribe(() => {
+      this.errorMessage = null;
+      this.successMessage = null;
+    });
   }
 
   submitForm(): void {
@@ -24,15 +31,19 @@ export class ResetPasswordComponent {
       this.authService
         .resetPassword(
           this.resetPasswordForm.value,
-          '7bea7e6e975fe33ec0bcfd5da45956b9277e87290d9487e1bce3922ab3cc6555'
+          '77c6c1cbc392f15425a92f4f2552dbc706028b26b448d243a8be8bc09d1d139a'
         )
         .subscribe({
           next: (response) => {
             console.log('Password Reset Successful', response);
-            // Handle successful password reset, e.g., redirect to login
+            this.resetPasswordForm.reset();
+            this.errorMessage = null;
+            this.successMessage = `Password Reset Successfully! Let's login`;
           },
           error: (error) => {
             console.error('Password Reset failed', error);
+            this.errorMessage = error.error.message;
+            this.successMessage = null;
           },
           complete: () => {
             console.log('Password reset request completed');

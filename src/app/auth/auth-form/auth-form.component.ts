@@ -35,11 +35,11 @@ export class AuthFormComponent {
   @Input() redirectForgot!: string;
   @Input() redirectLink!: string;
   @Input() redirectText!: string;
-  @Output() submitForm = new EventEmitter<void>(); // Add this line
+  @Output() submitForm = new EventEmitter<void>();
 
   onSubmit() {
     if (this.formGroup.valid) {
-      this.submitForm.emit(); // Emit the submit event
+      this.submitForm.emit();
       console.log('Form Submitted', this.formGroup.value);
     } else {
       for (const i in this.formGroup.controls) {

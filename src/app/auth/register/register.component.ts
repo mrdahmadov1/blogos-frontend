@@ -9,6 +9,8 @@ import { AuthService } from '../auth.service';
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
@@ -19,6 +21,11 @@ export class RegisterComponent {
       password: [null, [Validators.required]],
       passwordConfirm: [null, [Validators.required]],
     });
+
+    this.registerForm.valueChanges.subscribe(() => {
+      this.errorMessage = null;
+      this.successMessage = null;
+    });
   }
 
   submitForm(): void {
@@ -26,10 +33,14 @@ export class RegisterComponent {
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) => {
           console.log('Registration Successful', response);
-          // Handle registration success, e.g., redirect to login
+          this.registerForm.reset();
+          this.errorMessage = null;
+          this.successMessage = `Successfully! Let's login`;
         },
         error: (error) => {
           console.error('Registration failed', error);
+          this.errorMessage = error.error.message;
+          this.successMessage = null;
         },
         complete: () => {
           console.log('Registration request completed');

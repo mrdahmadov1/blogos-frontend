@@ -9,12 +9,19 @@ import { AuthService } from '../auth.service';
 })
 export class ForgotPasswordComponent {
   forgotPasswordForm!: FormGroup;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.forgotPasswordForm = this.fb.group({
       email: [null, [Validators.required, Validators.email]],
+    });
+
+    this.forgotPasswordForm.valueChanges.subscribe(() => {
+      this.errorMessage = null;
+      this.successMessage = null;
     });
   }
 
@@ -23,10 +30,14 @@ export class ForgotPasswordComponent {
       this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe({
         next: (response) => {
           console.log('Forgot Password Request Successful', response);
-          // Handle forgot password request success, e.g., inform the user to check their email
+          this.forgotPasswordForm.reset();
+          this.errorMessage = null;
+          this.successMessage = `Reset link sent Successfully, Check your Email!`;
         },
         error: (error) => {
           console.error('Forgot Password Request failed', error);
+          this.errorMessage = error.error.message;
+          this.successMessage = null;
         },
         complete: () => {
           console.log('Forgot password request completed');

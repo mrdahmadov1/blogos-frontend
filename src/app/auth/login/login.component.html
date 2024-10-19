@@ -1,3 +1,11 @@
+<nz-alert *ngIf="errorMessage" 
+          [nzMessage]="errorMessage" 
+          nzType="error" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
 <app-auth-form
   [formGroup]="loginForm"
   [title]="'Let\'s login'"

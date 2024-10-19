@@ -9,6 +9,7 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+  errorMessage: string | null = null;
 
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
@@ -17,6 +18,10 @@ export class LoginComponent {
       email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required]],
     });
+
+    this.loginForm.valueChanges.subscribe(() => {
+      this.errorMessage = null;
+    });
   }
 
   submitForm(): void {
@@ -24,10 +29,11 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           console.log('Login Successful', response);
-          // Handle login success, e.g., redirect to home
+          this.errorMessage = null;
         },
         error: (error) => {
           console.error('Login failed', error);
+          this.errorMessage = error.error.message;
         },
         complete: () => {
           console.log('Login request completed');
