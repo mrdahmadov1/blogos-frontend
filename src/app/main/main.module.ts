@@ -8,9 +8,10 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [MainComponent, UsersComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -19,6 +20,7 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
     NzIconModule,
     NzBreadCrumbModule,
     NzCollapseModule,
+    NzIconModule.forRoot([]),
   ],
 })
 export class MainModule {}
