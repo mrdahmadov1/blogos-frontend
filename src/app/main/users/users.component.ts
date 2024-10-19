@@ -1,5 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AddUserModalComponent } from './add-user-modal/add-user-modal.component';
+import { UserService } from './users.service';
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface UsersResponse {
+  status: string;
+  results: number;
+  data: User[];
+}
 
 @Component({
   selector: 'app-users',
@@ -7,37 +21,44 @@ import { AddUserModalComponent } from './add-user-modal/add-user-modal.component
   styleUrls: ['./users.component.css'],
 })
 export class UsersComponent implements OnInit {
-  @ViewChild('addUserModal') addUserModal!: AddUserModalComponent; // Access the AddUserModal component
+  @ViewChild('addUserModal') addUserModal!: AddUserModalComponent;
 
-  editCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editCache: { [key: string]: { edit: boolean; data: User } } = {};
   deleteCache: { [key: string]: { confirm: boolean } } = {};
-  users: any[] = [];
+  users: User[] = [];
+  usersOfCurrentPageData: readonly User[] = [];
+  errorMessage: string | null = null;
 
-  constructor() {}
+  constructor(private usersService: UserService) {}
+
+  onCurrentPageDataChange($event: readonly User[]): void {
+    this.usersOfCurrentPageData = $event;
+  }
 
   ngOnInit(): void {
-    // Initialize the user data and form
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        id: `${i}`,
-        name: `Edward ${i}`,
-        email: `edward${i}@example.com`,
-        role: `User`,
-      });
-    }
-    this.users = data;
-    this.updateEditCache();
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.usersService.getAllUsers().subscribe({
+      next: (response: UsersResponse) => {
+        this.users = response.data;
+        this.updateEditCache();
+      },
+      error: (error) => {
+        console.error('Failed to load users:', error);
+        this.errorMessage = 'Failed to load users';
+      },
+    });
   }
 
   showAddUserModal(): void {
-    this.addUserModal.show(); // Show the modal through a reference
+    this.addUserModal.show();
   }
 
-  handleUserAdded(newUser: any): void {
-    this.users = [...this.users, newUser];
+  handleUserAdded(newUser: User): void {
+    this.users.push(newUser);
     this.updateEditCache();
-    console.log('User added:', newUser);
   }
 
   // Edit and Delete logic
@@ -50,45 +71,47 @@ export class UsersComponent implements OnInit {
   }
 
   cancelEdit(id: string): void {
-    const index = this.users.findIndex((item) => item.id === id);
-    this.editCache[id] = {
-      data: { ...this.users[index] },
-      edit: false,
-    };
+    if (this.editCache[id]) {
+      this.editCache[id].edit = false;
+    }
   }
 
   saveEdit(id: string): void {
-    const index = this.users.findIndex((item) => item.id === id);
-    Object.assign(this.users[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
+    const userIndex = this.users.findIndex((user) => user._id === id);
+    if (userIndex !== -1) {
+      this.users[userIndex] = { ...this.editCache[id].data }; // Update the user data
+      this.cancelEdit(id); // Close the edit mode
+    }
   }
 
   cancelDelete(id: string): void {
-    this.deleteCache[id].confirm = false;
+    if (this.deleteCache[id]) {
+      this.deleteCache[id].confirm = false;
+    }
   }
 
   deleteUser(id: string): void {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index !== -1) {
-      this.users.splice(index, 1);
-      delete this.editCache[id];
-      delete this.deleteCache[id];
+    const userIndex = this.users.findIndex((user) => user._id === id);
+    if (userIndex !== -1) {
+      this.users.splice(userIndex, 1); // Remove user from the list
+      delete this.editCache[id]; // Clear the edit cache
+      delete this.deleteCache[id]; // Clear the delete cache
     }
   }
 
   updateEditCache(): void {
-    this.users.forEach((item) => {
-      this.editCache[item.id] = {
+    this.users.forEach((user) => {
+      this.editCache[user._id] = {
         edit: false,
-        data: { ...item },
+        data: { ...user }, // Store a copy of the user data
       };
-      this.deleteCache[item.id] = {
+      this.deleteCache[user._id] = {
         confirm: false,
       };
     });
   }
 
-  trackById(index: number, item: any): string {
-    return item.id;
+  trackById(index: number, item: User): string {
+    return item._id;
   }
 }

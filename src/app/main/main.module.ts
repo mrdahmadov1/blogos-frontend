@@ -17,6 +17,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { AddUserModalComponent } from './users/add-user-modal/add-user-modal.component';
+import { HttpClientModule } from '@angular/common/http';
+import { UserService } from './users/users.service';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { AddUserModalComponent } from './users/add-user-modal/add-user-modal.com
   imports: [
     CommonModule,
     MainRoutingModule,
+    HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
     NzLayoutModule,
@@ -40,6 +44,8 @@ import { AddUserModalComponent } from './users/add-user-modal/add-user-modal.com
     NzDividerModule,
     NzModalModule,
     NzFormModule,
+    NzPaginationModule,
   ],
+  providers: [UserService],
 })
 export class MainModule {}
