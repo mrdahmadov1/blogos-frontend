@@ -9,5 +9,6 @@
   ]"
   [buttonText]="'Register'"
   [redirectText]="'Already have an account? Login'"
-  [redirectLink]="'/login'">
+  [redirectLink]="'/auth/login'"
+  (submitForm)="submitForm()">
 </app-auth-form>

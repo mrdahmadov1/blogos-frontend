@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AuthService } from './auth.service';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -26,12 +29,13 @@ import { AuthFormComponent } from './auth-form/auth-form.component';
   imports: [
     CommonModule,
     AuthRoutingModule,
-
+    HttpClientModule,
     ReactiveFormsModule,
     NzInputModule,
     NzFormModule,
     NzButtonModule,
     NzCheckboxModule,
   ],
+  providers: [AuthService],
 })
 export class AuthModule {}

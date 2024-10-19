@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
   trigger,
@@ -35,9 +35,11 @@ export class AuthFormComponent {
   @Input() redirectForgot!: string;
   @Input() redirectLink!: string;
   @Input() redirectText!: string;
+  @Output() submitForm = new EventEmitter<void>(); // Add this line
 
-  submitForm() {
+  onSubmit() {
     if (this.formGroup.valid) {
+      this.submitForm.emit(); // Emit the submit event
       console.log('Form Submitted', this.formGroup.value);
     } else {
       for (const i in this.formGroup.controls) {

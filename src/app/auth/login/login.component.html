@@ -6,7 +6,9 @@
     { type: 'password', formControlName: 'password', placeholder: 'Password', errorTip: 'Please input your password!' },
   ]"
   [buttonText]="'Log in'"
-  [redirectForgot]="'/forgot-password'"
+  [redirectForgot]="'/auth/forgot-password'"
   [redirectText]="'Don`t have an account? Register'"
-  [redirectLink]="'/register'">
+  [redirectLink]="'/auth/register'"
+  (submitForm)="submitForm()"
+  >
 </app-auth-form>
