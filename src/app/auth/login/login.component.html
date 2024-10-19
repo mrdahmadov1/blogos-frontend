@@ -1,0 +1,12 @@
+<app-auth-form
+  [formGroup]="loginForm"
+  [title]="'Let\'s login'"
+  [fields]="[
+    { type: 'email', formControlName: 'email', placeholder: 'Email', errorTip: 'Please input your email!' },
+    { type: 'password', formControlName: 'password', placeholder: 'Password', errorTip: 'Please input your password!' },
+  ]"
+  [buttonText]="'Log in'"
+  [redirectForgot]="'/forgot-password'"
+  [redirectText]="'Don`t have an account? Register'"
+  [redirectLink]="'/register'">
+</app-auth-form>

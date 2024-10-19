@@ -1,0 +1,28 @@
+.form {
+  width: 100%;  
+}
+
+.form-title {
+  color: #1890ff;
+  text-align: center;
+}
+
+.form-input:last-of-type{
+  margin-bottom: 0;
+}
+
+.form-margin {
+  margin: 12px 0 16px;
+}
+
+.form-forgot {
+  float: right;
+}
+
+.form-button {
+  width: 100%;
+}
+
+.form-redirect {
+text-align: center;
+}

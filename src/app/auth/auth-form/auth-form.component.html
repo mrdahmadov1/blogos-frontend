@@ -1,0 +1,18 @@
+<form nz-form [formGroup]="formGroup" class="form" (ngSubmit)="submitForm()">
+  <h1 class="form-title">{{ title }}</h1>
+
+  <ng-container *ngFor="let field of fields">
+    <nz-form-item class="form-input">
+      <nz-form-control [nzErrorTip]="field.errorTip">
+        <nz-input-group>
+          <input [type]="field.type" nz-input [formControlName]="field.formControlName" [placeholder]="field.placeholder" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+
+  <a *ngIf="redirectForgot" class="form-forgot" [routerLink]="redirectForgot">Forgot password?</a>
+  
+  <button nz-button class="form-button form-margin" nzType="primary">{{ buttonText }}</button>
+  <p  *ngIf="redirectText && redirectLink" class="form-redirect"><a [routerLink]="redirectLink">{{redirectText}}</a></p>
+</form>

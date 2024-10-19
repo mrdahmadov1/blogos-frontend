@@ -1,0 +1,19 @@
+.auth-layout {
+  display: flex;                
+  justify-content: center;      
+  align-items: center;          
+  min-height: 100vh;           
+  background-color: #f0f2f5;  }
+
+.auth-container {
+  width: 400px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);}
+
+@media (max-width: 600px) {
+  .auth-container {
+    width: 90%;
+  }
+}
