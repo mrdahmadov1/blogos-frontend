@@ -1,0 +1,25 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Add New User" nzCancelText="Cancel" nzOkText="Add" (nzOnCancel)="handleCancel()" (nzOnOk)="handleAddUser()">
+  <form *nzModalContent nz-form [formGroup]="addUserForm" (ngSubmit)="handleAddUser()">
+
+    <!-- Name Input -->
+    <nz-form-item class="modal-form-item">
+      <nz-form-control [nzErrorTip]="addUserForm.get('name')?.invalid && (addUserForm.get('name')?.dirty || addUserForm.get('name')?.touched) ? 'Name is required and should be at least 8 characters' : undefined">
+        <input nz-input formControlName="name" placeholder="Name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Email Input -->
+    <nz-form-item class="modal-form-item">
+      <nz-form-control [nzErrorTip]="addUserForm.get('email')?.invalid && (addUserForm.get('email')?.dirty || addUserForm.get('email')?.touched) ? 'Invalid email format' : undefined">
+        <input nz-input formControlName="email" placeholder="Email" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Role Input -->
+    <nz-form-item class="modal-form-item">
+      <nz-form-control [nzErrorTip]="addUserForm.get('role')?.invalid && (addUserForm.get('role')?.dirty || addUserForm.get('role')?.touched) ? 'Role is required' : undefined">
+        <input nz-input formControlName="role" placeholder="Role" />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
