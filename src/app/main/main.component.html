@@ -8,8 +8,8 @@
       <li nz-menu-item [nzSelected]="router.url === '/posts'">
         <a routerLink="/posts"><span>All Posts</span></a>
       </li>
-      <li *ngIf="currentUser.role === 'user'" nz-menu-item>
-        <span>My Posts</span>
+      <li *ngIf="currentUser.role === 'user'" nz-menu-item [nzSelected]="router.url === '/my-posts'">
+        <a routerLink="/my-posts"><span>My Posts</span></a>
       </li>
       <li nz-menu-item [nzSelected]="router.url === '/profile'">
         <a routerLink="/profile"><span>Profile</span></a>

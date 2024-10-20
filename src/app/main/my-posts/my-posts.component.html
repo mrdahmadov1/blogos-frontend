@@ -1,0 +1,66 @@
+<nz-alert *ngIf="errorMessage" 
+          [nzMessage]="errorMessage" 
+          nzType="error" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+<nz-alert *ngIf="successMessage" 
+          [nzMessage]="successMessage" 
+          nzType="success" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+<button class="add-button" nz-button nzType="primary" (click)="showAddPostModal()">Add Post</button>
+
+<nz-table #postsTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="posts" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+  <thead>
+    <tr>
+      <th nzWidth="20%">Title</th>
+      <th nzWidth="80%">Content</th>
+      <th nzWidth="120px" nzAlign="center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of postsOfCurrentPageData; trackBy: trackById">
+      <ng-container *ngIf="!editCache[data._id]?.edit && !deleteCache[data._id]?.confirm">
+        <td>{{ data.title }}</td>
+        <td>{{ data.content }}</td>
+        <td nzAlign="center">
+          <button (click)="startEdit(data._id)" class="edit-button" nz-button nzType="primary">
+            <span nz-icon nzType="edit" nzTheme="outline"></span>
+          </button>
+          <nz-divider nzType="vertical"></nz-divider>
+          <button (click)="startDelete(data._id)" class="delete-button" nz-button nzType="primary">
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="editCache[data._id]?.edit">
+        <td><input type="text" nz-input [(ngModel)]="editCache[data._id].data.title" /></td>
+        <td><input type="text" nz-input [(ngModel)]="editCache[data._id].data.content" /></td>
+        <td nzAlign="center">
+          <a (click)="saveEdit(data._id)" class="save">Save</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="cancelEdit(data._id)">Cancel</a>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="deleteCache[data._id]?.confirm">
+        <td colspan="4" nzAlign="center">
+          <span>Are you sure you want to delete this user? <br/></span>
+          <a (click)="deleteUser(data._id)" class="yes-link">Yes</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="cancelDelete(data._id)" class="no-link">No</a>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>
+
+<!-- Add Post Modal -->
+<app-add-post-modal #addPostModal (postAdded)="handlePostAdded($event)"></app-add-post-modal>

@@ -4,6 +4,7 @@ import { MainComponent } from './main.component';
 import { UsersComponent } from './users/users.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PostsComponent } from './posts/posts.component';
+import { MyPostsComponent } from './my-posts/my-posts.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
     children: [
       { path: 'users', component: UsersComponent },
       { path: 'posts', component: PostsComponent },
+      { path: 'my-posts', component: MyPostsComponent },
       { path: 'profile', component: ProfileComponent },
     ],
   },

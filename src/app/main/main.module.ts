@@ -23,7 +23,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { PostsComponent } from './posts/posts.component';
 import { PostService } from './posts/posts.service';
-import { AddPostModalComponent } from './posts/add-post-modal/add-post-modal.component';
+import { AddPostModalComponent } from './my-posts/add-post-modal/add-post-modal.component';
+import { MyPostsComponent } from './my-posts/my-posts.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AddPostModalComponent } from './posts/add-post-modal/add-post-modal.com
     AddUserModalComponent,
     PostsComponent,
     AddPostModalComponent,
+    MyPostsComponent,
   ],
   imports: [
     CommonModule,

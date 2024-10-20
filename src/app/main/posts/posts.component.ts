@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AddPostModalComponent } from './add-post-modal/add-post-modal.component';
+import { Component, OnInit } from '@angular/core';
 import { PostService } from './posts.service';
 
 interface User {
@@ -28,9 +27,10 @@ interface PostsResponse {
   styleUrls: ['./posts.component.css'],
 })
 export class PostsComponent implements OnInit {
-  @ViewChild('addPostModal') addPostModal!: AddPostModalComponent;
-
   deleteCache: { [key: string]: { confirm: boolean } } = {};
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+
   posts: Post[] = [];
   postsOfCurrentPageData: readonly Post[] = [];
   currentUser: any | null = null;
@@ -56,24 +56,7 @@ export class PostsComponent implements OnInit {
         this.posts = response.data.filter((post) => post.user !== null);
       },
       error: (error) =>
-        this.setMessage(
-          error.error.message || 'Failed to load posts!',
-          'error'
-        ),
-    });
-  }
-
-  showAddPostModal(): void {
-    this.addPostModal.show();
-  }
-
-  handlePostAdded(newPost: Omit<Post, '_id' | 'createdAt'>): void {
-    this.postsService.createPost(newPost).subscribe({
-      next: () => {
-        this.loadPosts();
-        this.setMessage('Post Created Successfully!', 'success');
-      },
-      error: (error) => this.setMessage(error.error.message, 'error'),
+        (this.errorMessage = error.error.message || 'Failed to load posts!'),
     });
   }
 
@@ -83,7 +66,8 @@ export class PostsComponent implements OnInit {
     }
 
     this.deleteCache[id].confirm = true;
-    this.resetMessages();
+    this.successMessage = null;
+    this.errorMessage = null;
   }
 
   cancelDelete(id: string): void {
@@ -93,7 +77,7 @@ export class PostsComponent implements OnInit {
   }
 
   deletePost(id: string): void {
-    console.log('Deleting post with id:', id); // Check if the ID is passed correctly
+    console.log('Deleting post with id:', id);
 
     this.postsService.deletePost(id).subscribe({
       next: () => {
@@ -101,30 +85,15 @@ export class PostsComponent implements OnInit {
         if (postIndex !== -1) {
           this.posts.splice(postIndex, 1);
         }
-        this.setMessage('Post Deleted Successfully!', 'success');
+        this.successMessage = 'Post Deleted Successfully!';
         this.loadPosts();
         this.cancelDelete(id);
       },
-      error: (error) => this.setMessage(error.error.message, 'error'),
+      error: (error) => (this.errorMessage = error.error.message),
     });
   }
 
   trackById(index: number, item: Post): string {
     return item._id;
-  }
-
-  private setMessage(message: string, type: 'success' | 'error'): void {
-    if (type === 'success') {
-      this.addPostModal.setSuccessMessage(message);
-      this.addPostModal.setErrorMessage('');
-    } else {
-      this.addPostModal.setErrorMessage(message);
-      this.addPostModal.setSuccessMessage('');
-    }
-  }
-
-  private resetMessages(): void {
-    this.addPostModal.setErrorMessage('');
-    this.addPostModal.setSuccessMessage('');
   }
 }

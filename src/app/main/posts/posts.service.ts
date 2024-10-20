@@ -56,6 +56,18 @@ export class PostService {
       );
   }
 
+  getMyPosts(): Observable<PostsResponse> {
+    return this.http
+      .get<PostsResponse>(`${this.baseUrl}`, { headers: this.getHeaders() })
+      .pipe(
+        map((response) => response),
+        catchError((error) => {
+          console.error('Get my posts error:', error);
+          throw error;
+        })
+      );
+  }
+
   createPost(post: Omit<Post, '_id' | 'createdAt'>): Observable<Post> {
     return this.http
       .post<Post>(`${this.baseUrl}`, post, { headers: this.getHeaders() })
