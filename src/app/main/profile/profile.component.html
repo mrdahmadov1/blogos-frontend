@@ -1,1 +1,90 @@
-<p>profile works!</p>
+<nz-alert *ngIf="errorMessage" 
+          [nzMessage]="errorMessage" 
+          nzType="error" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+<nz-alert *ngIf="successMessage" 
+          [nzMessage]="successMessage" 
+          nzType="success" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+
+<ng-container>
+  <h2>Profile details</h2>
+  <form nz-form (ngSubmit)="onUpdateMe()" [formGroup]="profileForm">
+        <nz-form-item class="form-item">
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="name"
+              placeholder="Enter your name"
+            />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-item">
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="email"
+              placeholder="Enter your email"
+            />
+          </nz-form-control>
+        </nz-form-item>
+
+    <button class="button edit-button" nz-button nzType="primary" [disabled]="profileForm.invalid">
+      Update Me
+    </button>
+  </form>
+
+  <br />
+
+  <form nz-form (ngSubmit)="onUpdatePassword()" [formGroup]="passwordForm">
+    <nz-form-item class="form-item">
+      <nz-form-control>
+        <input
+          nz-input
+          formControlName="passwordCurrent"
+          type="password"
+          placeholder="Enter your current password"
+        />
+      </nz-form-control>
+    </nz-form-item>   
+    
+    <nz-form-item class="form-item">
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="password"
+              type="password"
+              placeholder="Enter new password"
+            />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-item">
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="passwordConfirm"
+              type="password"
+              placeholder="Confirm new password"
+            />
+          </nz-form-control>
+        </nz-form-item>
+
+    <button class="button edit-button" nz-button nzType="primary" [disabled]="passwordForm.invalid">
+      Update Password
+    </button>
+  </form>
+
+  <br />
+
+  <button class="button delete-button" nz-button nzType="primary" (click)="onDeleteMe()">Delete Account</button>
+</ng-container>

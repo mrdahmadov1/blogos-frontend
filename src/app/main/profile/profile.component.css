@@ -1,0 +1,36 @@
+form {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+button {
+  align-self: flex-end;
+}
+
+.form-item input{
+  width: 100%;
+  box-shadow: none;
+  outline: none;
+  border: 1px solid lightgray;
+  padding: 6px 12px;
+}
+
+.button{
+  color: #fff;
+  font-weight: 500;
+}
+
+.edit-button{
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.delete-button{
+  width: 100%;
+  max-width: 500px;
+  margin: 16px 0 0;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}

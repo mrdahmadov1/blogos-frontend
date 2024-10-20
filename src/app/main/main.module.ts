@@ -25,6 +25,7 @@ import { PostsComponent } from './posts/posts.component';
 import { PostService } from './posts/posts.service';
 import { AddPostModalComponent } from './my-posts/add-post-modal/add-post-modal.component';
 import { MyPostsComponent } from './my-posts/my-posts.component';
+import { ProfileService } from './profile/profile.service';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,6 @@ import { MyPostsComponent } from './my-posts/my-posts.component';
     NzAlertModule,
     NzPaginationModule,
   ],
-  providers: [UserService, PostService],
+  providers: [UserService, PostService, ProfileService],
 })
 export class MainModule {}
