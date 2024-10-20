@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
@@ -7,8 +7,17 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
+  currentUser: any | null = null;
+
   constructor(public router: Router, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+    }
+  }
 
   logout(): void {
     this.authService.logout().subscribe({

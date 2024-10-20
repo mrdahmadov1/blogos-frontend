@@ -21,6 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './users/users.service';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { PostsComponent } from './posts/posts.component';
+import { PostService } from './posts/posts.service';
+import { AddPostModalComponent } from './posts/add-post-modal/add-post-modal.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,8 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     UsersComponent,
     ProfileComponent,
     AddUserModalComponent,
+    PostsComponent,
+    AddPostModalComponent,
   ],
   imports: [
     CommonModule,
@@ -48,6 +53,6 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzAlertModule,
     NzPaginationModule,
   ],
-  providers: [UserService],
+  providers: [UserService, PostService],
 })
 export class MainModule {}

@@ -1,0 +1,37 @@
+<nz-alert *ngIf="errorMessage" 
+          [nzMessage]="errorMessage" 
+          nzType="error" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+<nz-alert *ngIf="successMessage" 
+          [nzMessage]="successMessage" 
+          nzType="success" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Add New Post" nzCancelText="Cancel" nzOkText="Add" (nzOnCancel)="handleCancel()" (nzOnOk)="handleAddPost()">
+  <form *nzModalContent nz-form [formGroup]="addPostForm" (ngSubmit)="handleAddPost()">
+
+    <!-- Title Input -->
+    <nz-form-item class="modal-form-item">
+      <nz-form-control [nzErrorTip]="addPostForm.get('title')?.invalid && (addPostForm.get('title')?.dirty || addPostForm.get('title')?.touched) ? 'Title is required' : undefined">
+        <input nz-input formControlName="title" placeholder="Title" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Content Input -->
+    <nz-form-item class="modal-form-item">
+      <nz-form-control [nzErrorTip]="addPostForm.get('content')?.invalid && (addPostForm.get('content')?.dirty || addPostForm.get('content')?.touched) ? 'Content is required' : undefined">
+        <textarea nz-input formControlName="content" placeholder="Content"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+

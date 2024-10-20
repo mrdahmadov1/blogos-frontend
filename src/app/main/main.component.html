@@ -2,13 +2,13 @@
   <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
     <div class="logo">Blogos</div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-menu-item [nzSelected]="router.url === '/users'">
+      <li *ngIf="currentUser.role === 'admin'" nz-menu-item [nzSelected]="router.url === '/users'">
         <a routerLink="/users"><span>Users</span></a>
       </li>
-      <li nz-menu-item>
-        <span>All Posts</span>
+      <li nz-menu-item [nzSelected]="router.url === '/posts'">
+        <a routerLink="/posts"><span>All Posts</span></a>
       </li>
-      <li nz-menu-item>
+      <li *ngIf="currentUser.role === 'user'" nz-menu-item>
         <span>My Posts</span>
       </li>
       <li nz-menu-item [nzSelected]="router.url === '/profile'">
@@ -21,7 +21,9 @@
   </nz-sider>
   <nz-layout>
     <nz-content>
-      <div class="inner-content"><router-outlet /></div>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
     </nz-content>
   </nz-layout>
 </nz-layout>

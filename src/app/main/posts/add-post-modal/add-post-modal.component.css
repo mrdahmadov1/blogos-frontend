@@ -1,0 +1,14 @@
+
+.modal-form-item{
+  margin-bottom: 8px;
+}
+
+.modal-form-item input,
+.modal-form-item textarea{
+  width: 100%;
+}
+
+.modal-form-item textarea{
+  resize: none;
+  min-height: 200px;
+}

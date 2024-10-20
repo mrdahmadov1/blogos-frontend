@@ -1,0 +1,33 @@
+<nz-table #postsTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="posts" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+  <thead>
+    <tr>
+      <th nzWidth="20%">Author</th>
+      <th nzWidth="20%">Title</th>
+      <th nzWidth="60%">Content</th>
+      <th *ngIf="currentUser.role === 'admin'" nzWidth="30px" nzAlign="center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of postsOfCurrentPageData; trackBy: trackById">
+      <ng-container *ngIf="!deleteCache[data._id]?.confirm">
+        <td>{{ data.user.name }}</td>
+        <td>{{ data.title }}</td>
+        <td>{{ data.content }}</td>
+        <td *ngIf="currentUser.role === 'admin'" nzAlign="center">
+            <button (click)="startDelete(data._id)" class="delete-button" nz-button nzType="primary">
+              <span nz-icon nzType="delete" nzTheme="outline"></span>
+            </button>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="deleteCache[data._id]?.confirm">
+        <td colspan="4" nzAlign="center">
+          <span>Are you sure you want to delete this post? <br/></span>
+          <a (click)="deletePost(data._id)" class="yes-link">Yes</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="cancelDelete(data._id)" class="no-link">No</a>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>

@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('user', JSON.stringify(response.data.user));
           this.errorMessage = null;
 
-          this.router.navigate(['/users']);
+          this.router.navigate(['/posts']);
         },
         error: (error) => {
           console.error('Login failed', error);
