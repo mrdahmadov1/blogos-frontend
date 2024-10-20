@@ -9,6 +9,13 @@ interface User {
   role: string;
 }
 
+interface NewUser {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
+
 interface UsersResponse {
   status: string;
   results: number;
@@ -27,7 +34,6 @@ export class UsersComponent implements OnInit {
   deleteCache: { [key: string]: { confirm: boolean } } = {};
   users: User[] = [];
   usersOfCurrentPageData: readonly User[] = [];
-  errorMessage: string | null = null;
 
   constructor(private usersService: UserService) {}
 
@@ -45,10 +51,11 @@ export class UsersComponent implements OnInit {
         this.users = response.data;
         this.updateEditCache();
       },
-      error: (error) => {
-        console.error('Failed to load users:', error);
-        this.errorMessage = 'Failed to load users';
-      },
+      error: (error) =>
+        this.setMessage(
+          error.error.message || 'Failed to load users!',
+          'error'
+        ),
     });
   }
 
@@ -56,18 +63,24 @@ export class UsersComponent implements OnInit {
     this.addUserModal.show();
   }
 
-  handleUserAdded(newUser: User): void {
-    this.users.push(newUser);
-    this.updateEditCache();
+  handleUserAdded(newUser: NewUser): void {
+    this.usersService.createUser(newUser).subscribe({
+      next: () => {
+        this.loadUsers();
+        this.setMessage('User Created Successfully!', 'success');
+      },
+      error: (error) => this.setMessage(error.error.message, 'error'),
+    });
   }
 
-  // Edit and Delete logic
   startEdit(id: string): void {
     this.editCache[id].edit = true;
+    this.resetMessages();
   }
 
   startDelete(id: string): void {
     this.deleteCache[id].confirm = true;
+    this.resetMessages();
   }
 
   cancelEdit(id: string): void {
@@ -79,8 +92,15 @@ export class UsersComponent implements OnInit {
   saveEdit(id: string): void {
     const userIndex = this.users.findIndex((user) => user._id === id);
     if (userIndex !== -1) {
-      this.users[userIndex] = { ...this.editCache[id].data }; // Update the user data
-      this.cancelEdit(id); // Close the edit mode
+      this.usersService.updateUser(id, this.editCache[id].data).subscribe({
+        next: () => {
+          this.users[userIndex] = { ...this.editCache[id].data };
+          this.setMessage('User Updated Successfully!', 'success');
+          this.loadUsers();
+          this.cancelEdit(id);
+        },
+        error: (error) => this.setMessage(error.error.message, 'error'),
+      });
     }
   }
 
@@ -91,27 +111,45 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: string): void {
-    const userIndex = this.users.findIndex((user) => user._id === id);
-    if (userIndex !== -1) {
-      this.users.splice(userIndex, 1); // Remove user from the list
-      delete this.editCache[id]; // Clear the edit cache
-      delete this.deleteCache[id]; // Clear the delete cache
-    }
+    this.usersService.deleteUser(id).subscribe({
+      next: () => {
+        const userIndex = this.users.findIndex((user) => user._id === id);
+        if (userIndex !== -1) {
+          this.users.splice(userIndex, 1);
+          delete this.editCache[id];
+          delete this.deleteCache[id];
+        }
+        this.setMessage('User Deleted Successfully!', 'success');
+        this.loadUsers();
+        this.cancelDelete(id);
+      },
+      error: (error) => this.setMessage(error.error.message, 'error'),
+    });
   }
 
   updateEditCache(): void {
     this.users.forEach((user) => {
-      this.editCache[user._id] = {
-        edit: false,
-        data: { ...user }, // Store a copy of the user data
-      };
-      this.deleteCache[user._id] = {
-        confirm: false,
-      };
+      this.editCache[user._id] = { edit: false, data: { ...user } };
+      this.deleteCache[user._id] = { confirm: false };
     });
   }
 
   trackById(index: number, item: User): string {
     return item._id;
+  }
+
+  private setMessage(message: string, type: 'success' | 'error'): void {
+    if (type === 'success') {
+      this.addUserModal.setSuccessMessage(message);
+      this.addUserModal.setErrorMessage('');
+    } else {
+      this.addUserModal.setErrorMessage(message);
+      this.addUserModal.setSuccessMessage('');
+    }
+  }
+
+  private resetMessages(): void {
+    this.addUserModal.setErrorMessage('');
+    this.addUserModal.setSuccessMessage('');
   }
 }

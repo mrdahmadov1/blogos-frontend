@@ -1,25 +1,51 @@
+<nz-alert *ngIf="errorMessage" 
+          [nzMessage]="errorMessage" 
+          nzType="error" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+<nz-alert *ngIf="successMessage" 
+          [nzMessage]="successMessage" 
+          nzType="success" 
+          [nzShowIcon]="true" 
+          [nzCloseable]="true"
+          style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+</nz-alert>
+
+
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Add New User" nzCancelText="Cancel" nzOkText="Add" (nzOnCancel)="handleCancel()" (nzOnOk)="handleAddUser()">
   <form *nzModalContent nz-form [formGroup]="addUserForm" (ngSubmit)="handleAddUser()">
 
     <!-- Name Input -->
     <nz-form-item class="modal-form-item">
-      <nz-form-control [nzErrorTip]="addUserForm.get('name')?.invalid && (addUserForm.get('name')?.dirty || addUserForm.get('name')?.touched) ? 'Name is required and should be at least 8 characters' : undefined">
+      <nz-form-control [nzErrorTip]="addUserForm.get('name')?.invalid && (addUserForm.get('name')?.dirty || addUserForm.get('name')?.touched) ? 'Name is required' : undefined">
         <input nz-input formControlName="name" placeholder="Name" />
       </nz-form-control>
     </nz-form-item>
 
     <!-- Email Input -->
     <nz-form-item class="modal-form-item">
-      <nz-form-control [nzErrorTip]="addUserForm.get('email')?.invalid && (addUserForm.get('email')?.dirty || addUserForm.get('email')?.touched) ? 'Invalid email format' : undefined">
+      <nz-form-control [nzErrorTip]="addUserForm.get('email')?.invalid && (addUserForm.get('email')?.dirty || addUserForm.get('email')?.touched) ? 'Email is required' : undefined">
         <input nz-input formControlName="email" placeholder="Email" />
       </nz-form-control>
     </nz-form-item>
 
-    <!-- Role Input -->
+    <!-- Password Input -->
     <nz-form-item class="modal-form-item">
-      <nz-form-control [nzErrorTip]="addUserForm.get('role')?.invalid && (addUserForm.get('role')?.dirty || addUserForm.get('role')?.touched) ? 'Role is required' : undefined">
-        <input nz-input formControlName="role" placeholder="Role" />
+      <nz-form-control [nzErrorTip]="addUserForm.get('password')?.invalid && (addUserForm.get('password')?.dirty || addUserForm.get('password')?.touched) ? 'Password is required' : undefined">
+        <input nz-input formControlName="password" placeholder="Password" />
       </nz-form-control>
     </nz-form-item>
+
+      <!-- Password Confirm Input -->
+      <nz-form-item class="modal-form-item">
+        <nz-form-control [nzErrorTip]="addUserForm.get('passwordConfirm')?.invalid && (addUserForm.get('passwordConfirm')?.dirty || addUserForm.get('passwordConfirm')?.touched) ? 'Password Confirm is required' : undefined">
+          <input nz-input formControlName="passwordConfirm" placeholder="Password Confirm" />
+        </nz-form-control>
+      </nz-form-item>
   </form>
 </nz-modal>
+
+

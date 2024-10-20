@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private cookieService: CookieService
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -35,10 +35,11 @@ export class LoginComponent implements OnInit {
         next: (response) => {
           console.log('Login Successful', response);
 
-          this.cookieService.set('jwt', response.token);
+          localStorage.setItem('jwt', response.token);
           localStorage.setItem('user', JSON.stringify(response.data.user));
-
           this.errorMessage = null;
+
+          this.router.navigate(['/users']);
         },
         error: (error) => {
           console.error('Login failed', error);

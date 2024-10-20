@@ -7,27 +7,35 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./add-user-modal.component.css'],
 })
 export class AddUserModalComponent {
-  isVisible = false; // Visibility of the modal
-  addUserForm!: FormGroup; // Form group for adding new user
+  isVisible = false;
+  addUserForm!: FormGroup;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
-  @Output() userAdded = new EventEmitter<any>(); // Event emitter to notify the parent component
+  @Output() userAdded = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder) {
     this.initializeForm();
   }
 
   initializeForm(): void {
-    // Initialize Add User form
     this.addUserForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(8)]],
+      name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      role: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+      passwordConfirm: ['', [Validators.required]],
+    });
+
+    this.addUserForm.valueChanges.subscribe(() => {
+      this.errorMessage = null; // Reset error message on value change
+      this.successMessage = null; // Reset success message on value change
     });
   }
 
-  // Handle the visibility of the modal
   show(): void {
     this.isVisible = true;
+    this.errorMessage = null;
+    this.successMessage = null;
   }
 
   handleCancel(): void {
@@ -36,16 +44,22 @@ export class AddUserModalComponent {
   }
 
   handleAddUser(): void {
-    // Mark all controls as touched to trigger validation error messages
     this.addUserForm.markAllAsTouched();
 
     if (this.addUserForm.valid) {
-      const newUser = { ...this.addUserForm.value, id: `${Date.now()}` }; // Unique ID based on timestamp
-      this.userAdded.emit(newUser); // Emit the new user to the parent component
-      this.isVisible = false; // Close the modal after adding user
+      const newUser = { ...this.addUserForm.value, id: `${Date.now()}` };
+      this.userAdded.emit(newUser);
+      this.isVisible = false;
       this.addUserForm.reset();
-    } else {
-      console.log('Form is invalid');
     }
+  }
+
+  // New methods to set messages from parent component
+  setSuccessMessage(message: string): void {
+    this.successMessage = message;
+  }
+
+  setErrorMessage(message: string): void {
+    this.errorMessage = message;
   }
 }

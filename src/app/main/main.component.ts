@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-main',
@@ -9,18 +8,14 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./main.component.css'],
 })
 export class MainComponent {
-  constructor(
-    public router: Router,
-    private authService: AuthService,
-    private cookieService: CookieService
-  ) {}
+  constructor(public router: Router, private authService: AuthService) {}
 
   logout(): void {
     this.authService.logout().subscribe({
       next: (response) => {
         console.log('Logout Successful', response);
         localStorage.removeItem('user');
-        this.cookieService.delete('jwt');
+        localStorage.setItem('jwt', '');
         this.router.navigate(['/auth/login']);
       },
       error: (error) => {

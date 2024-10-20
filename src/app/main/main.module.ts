@@ -20,6 +20,7 @@ import { AddUserModalComponent } from './users/add-user-modal/add-user-modal.com
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './users/users.service';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzDividerModule,
     NzModalModule,
     NzFormModule,
+    NzAlertModule,
     NzPaginationModule,
   ],
   providers: [UserService],
