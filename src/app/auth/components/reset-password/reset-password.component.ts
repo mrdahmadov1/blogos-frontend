@@ -34,7 +34,7 @@ export class ResetPasswordComponent {
         )
         .subscribe({
           next: (response) => {
-            console.log('Password Reset Successful', response);
+            // console.log('Password Reset Successful', response);
             this.resetPasswordForm.reset();
             this.errorMessage = null;
             this.successMessage = `Password Reset Successfully! Let's login`;
@@ -43,9 +43,6 @@ export class ResetPasswordComponent {
             console.error('Password Reset failed', error);
             this.errorMessage = error.error.message;
             this.successMessage = null;
-          },
-          complete: () => {
-            console.log('Password reset request completed');
           },
         });
     } else {

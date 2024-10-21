@@ -40,7 +40,7 @@ export class AuthFormComponent {
   onSubmit() {
     if (this.formGroup.valid) {
       this.submitForm.emit();
-      console.log('Form Submitted', this.formGroup.value);
+      // console.log('Form Submitted', this.formGroup.value);
     } else {
       for (const i in this.formGroup.controls) {
         this.formGroup.controls[i].markAsDirty();

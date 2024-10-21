@@ -77,7 +77,7 @@ export class PostsComponent implements OnInit {
   }
 
   deletePost(id: string): void {
-    console.log('Deleting post with id:', id);
+    // console.log('Deleting post with id:', id);
 
     this.postsService.deletePost(id).subscribe({
       next: () => {

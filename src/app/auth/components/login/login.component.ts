@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Login Successful', response);
+          // console.log('Login Successful', response);
 
           localStorage.setItem('jwt', response.token);
           localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -43,9 +43,6 @@ export class LoginComponent implements OnInit {
         error: (error) => {
           console.error('Login failed', error);
           this.errorMessage = error.error.message;
-        },
-        complete: () => {
-          console.log('Login request completed');
         },
       });
     } else {

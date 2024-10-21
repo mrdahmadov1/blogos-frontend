@@ -28,7 +28,7 @@ export class ForgotPasswordComponent {
     if (this.forgotPasswordForm.valid) {
       this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe({
         next: (response) => {
-          console.log('Forgot Password Request Successful', response);
+          // console.log('Forgot Password Request Successful', response);
           this.forgotPasswordForm.reset();
           this.errorMessage = null;
           this.successMessage = `Reset link sent Successfully, Check your Email!`;
@@ -37,9 +37,6 @@ export class ForgotPasswordComponent {
           console.error('Forgot Password Request failed', error);
           this.errorMessage = error.error.message;
           this.successMessage = null;
-        },
-        complete: () => {
-          console.log('Forgot password request completed');
         },
       });
     } else {

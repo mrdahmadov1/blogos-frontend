@@ -31,7 +31,7 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) => {
-          console.log('Registration Successful', response);
+          // console.log('Registration Successful', response);
           this.registerForm.reset();
           this.errorMessage = null;
           this.successMessage = `Successfully! Let's login`;
@@ -40,9 +40,6 @@ export class RegisterComponent {
           console.error('Registration failed', error);
           this.errorMessage = error.error.message;
           this.successMessage = null;
-        },
-        complete: () => {
-          console.log('Registration request completed');
         },
       });
     } else {

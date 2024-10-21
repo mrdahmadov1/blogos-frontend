@@ -22,7 +22,7 @@ export class MainComponent implements OnInit {
   logout(): void {
     this.authService.logout().subscribe({
       next: (response) => {
-        console.log('Logout Successful', response);
+        // console.log('Logout Successful', response);
         localStorage.removeItem('user');
         localStorage.setItem('jwt', '');
         this.router.navigate(['/auth/login']);
