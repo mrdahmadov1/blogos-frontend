@@ -1,5 +1,8 @@
 # Blogos Frontend 
 ## Go to Site - [https://blogos-frontend.netlify.app/auth/login](https://blogos-frontend.netlify.app/auth/login)
+### Admin hesabı : 
+    Email: admin@gmail.com
+    Password: adminadmin
 
 ### İstifadə olunan əsas texnologiyalar
 - Angular / RxJs / Ant Design
