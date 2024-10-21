@@ -1,3 +1,10 @@
+.search-bar input{
+  width: 100%;
+  padding: 6px 12px;
+  border: 1px solid lightgray;
+  margin-bottom: 16px;
+}
+
 .add-button{
   float: right;
   margin-bottom: 16px;

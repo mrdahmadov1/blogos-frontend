@@ -1,26 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { AddPostModalComponent } from './add-post-modal/add-post-modal.component';
 import { PostService } from '../../services/posts.service';
-
-interface User {
-  _id: string;
-  name: string;
-}
-
-interface Post {
-  _id: string;
-  user: User;
-  title: string;
-  content: string;
-  createdAt: string;
-  id: string;
-}
-
-interface PostsResponse {
-  status: string;
-  results: number;
-  data: Post[];
-}
+import { Post, PostsResponse } from '../../models/post.model';
 
 @Component({
   selector: 'app-my-posts',
@@ -34,8 +15,10 @@ export class MyPostsComponent {
   deleteCache: { [key: string]: { confirm: boolean } } = {};
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  searchTerm: string = '';
 
   posts: Post[] = [];
+  filteredPosts: Post[] = [];
   postsOfCurrentPageData: readonly Post[] = [];
 
   constructor(private postsService: PostService) {}
@@ -52,10 +35,20 @@ export class MyPostsComponent {
     this.postsService.getMyPosts().subscribe({
       next: (response: PostsResponse) => {
         this.posts = response.data.filter((post) => post.user !== null);
+        this.filteredPosts = this.posts;
       },
       error: (error) =>
         (this.errorMessage = error.error.message || 'Failed to load posts!'),
     });
+  }
+
+  onSearchChange(searchValue: string): void {
+    this.searchTerm = searchValue;
+    this.filteredPosts = this.posts.filter(
+      (post) =>
+        post.title?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        post.content?.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 
   showAddPostModal(): void {
@@ -67,6 +60,7 @@ export class MyPostsComponent {
       next: () => {
         this.loadPosts();
         this.successMessage = 'Post Created Successfully!';
+        this.searchTerm = '';
       },
       error: (error) => (this.errorMessage = error.error.message),
     });
@@ -97,6 +91,7 @@ export class MyPostsComponent {
       this.postsService.updatePost(id, this.editCache[id].data).subscribe({
         next: () => {
           this.posts[postIndex] = { ...this.editCache[id].data };
+          this.searchTerm = '';
           this.successMessage = 'Post Updated Successfully!';
           this.errorMessage = null;
           this.loadPosts();
@@ -132,6 +127,8 @@ export class MyPostsComponent {
         const postIndex = this.posts.findIndex((post) => post._id === id);
         if (postIndex !== -1) {
           this.posts.splice(postIndex, 1);
+          this.filteredPosts = this.posts;
+          this.searchTerm = '';
           delete this.editCache[id];
           delete this.deleteCache[id];
         }

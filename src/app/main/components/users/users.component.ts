@@ -14,7 +14,10 @@ export class UsersComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: User } } = {};
   deleteCache: { [key: string]: { confirm: boolean } } = {};
   users: User[] = [];
+  filteredUsers: User[] = [];
   usersOfCurrentPageData: readonly User[] = [];
+
+  searchTerm: string = '';
 
   constructor(private usersService: UserService) {}
 
@@ -30,6 +33,7 @@ export class UsersComponent implements OnInit {
     this.usersService.getAllUsers().subscribe({
       next: (response: UsersResponse) => {
         this.users = response.data;
+        this.filteredUsers = response.data;
         this.updateEditCache();
       },
       error: (error) =>
@@ -40,6 +44,16 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  onSearchChange(searchValue: string): void {
+    this.searchTerm = searchValue;
+    this.filteredUsers = this.users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        user.email?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        user.role?.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
   showAddUserModal(): void {
     this.addUserModal.show();
   }
@@ -48,6 +62,7 @@ export class UsersComponent implements OnInit {
     this.usersService.createUser(newUser).subscribe({
       next: () => {
         this.loadUsers();
+        this.searchTerm = '';
         this.setMessage('User Created Successfully!', 'success');
       },
       error: (error) => this.setMessage(error.error.message, 'error'),
@@ -78,6 +93,7 @@ export class UsersComponent implements OnInit {
           this.users[userIndex] = { ...this.editCache[id].data };
           this.setMessage('User Updated Successfully!', 'success');
           this.loadUsers();
+          this.searchTerm = '';
           this.cancelEdit(id);
         },
         error: (error) => this.setMessage(error.error.message, 'error'),
@@ -97,6 +113,7 @@ export class UsersComponent implements OnInit {
         const userIndex = this.users.findIndex((user) => user._id === id);
         if (userIndex !== -1) {
           this.users.splice(userIndex, 1);
+          this.searchTerm = '';
           delete this.editCache[id];
           delete this.deleteCache[id];
         }

@@ -16,7 +16,17 @@
 
 <button class="add-button" nz-button nzType="primary" (click)="showAddPostModal()">Add Post</button>
 
-<nz-table #postsTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="posts" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+<div class="search-bar">
+  <input
+    nz-input
+    placeholder="Search by title, or content"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchChange($event)"
+  />
+</div>
+
+
+<nz-table #postsTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="filteredPosts" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
   <thead>
     <tr>
       <th nzWidth="20%">Title</th>

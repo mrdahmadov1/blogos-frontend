@@ -14,7 +14,16 @@
           style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
 </nz-alert>
 
-<nz-table #postsTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="posts" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+<div class="search-bar">
+  <input
+    nz-input
+    placeholder="Search by author, title, or content"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchChange($event)"
+  />
+</div>
+
+<nz-table #postsTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="filteredPosts" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
   <thead>
     <tr>
       <th nzWidth="20%">Author</th>

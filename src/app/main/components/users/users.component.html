@@ -1,6 +1,22 @@
 <button class="add-button" nz-button nzType="primary" (click)="showAddUserModal()">Add User</button>
 
-<nz-table #usersTable nzShowSizeChanger nzShowSizeChangerPostfix="Page" nzBordered [nzData]="users" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+<div class="search-bar">
+  <input
+    nz-input
+    placeholder="Search by name, email, or role"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearchChange($event)"
+  />
+</div>
+
+<nz-table
+  #usersTable
+  nzShowSizeChanger
+  nzShowSizeChangerPostfix="Page"
+  nzBordered
+  [nzData]="filteredUsers"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+>
   <thead>
     <tr>
       <th>Name</th>
@@ -49,5 +65,4 @@
   </tbody>
 </nz-table>
 
-<!-- Add User Modal -->
 <app-add-user-modal #addUserModal (userAdded)="handleUserAdded($event)"></app-add-user-modal>

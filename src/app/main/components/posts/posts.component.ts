@@ -1,25 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/posts.service';
-
-interface User {
-  _id: string;
-  name: string;
-}
-
-interface Post {
-  _id: string;
-  user: User;
-  title: string;
-  content: string;
-  createdAt: string;
-  id: string;
-}
-
-interface PostsResponse {
-  status: string;
-  results: number;
-  data: Post[];
-}
+import { Post, PostsResponse } from '../../models/post.model';
 
 @Component({
   selector: 'app-posts',
@@ -30,8 +11,10 @@ export class PostsComponent implements OnInit {
   deleteCache: { [key: string]: { confirm: boolean } } = {};
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  searchTerm: string = '';
 
   posts: Post[] = [];
+  filteredPosts: Post[] = [];
   postsOfCurrentPageData: readonly Post[] = [];
   currentUser: any | null = null;
 
@@ -54,10 +37,21 @@ export class PostsComponent implements OnInit {
     this.postsService.getAllPosts().subscribe({
       next: (response: PostsResponse) => {
         this.posts = response.data.filter((post) => post.user !== null);
+        this.filteredPosts = this.posts;
       },
       error: (error) =>
         (this.errorMessage = error.error.message || 'Failed to load posts!'),
     });
+  }
+
+  onSearchChange(searchValue: string): void {
+    this.searchTerm = searchValue;
+    this.filteredPosts = this.posts.filter(
+      (post) =>
+        post.user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        post.title?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        post.content?.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 
   startDelete(id: string): void {
@@ -77,13 +71,13 @@ export class PostsComponent implements OnInit {
   }
 
   deletePost(id: string): void {
-    // console.log('Deleting post with id:', id);
-
     this.postsService.deletePost(id).subscribe({
       next: () => {
         const postIndex = this.posts.findIndex((post) => post._id === id);
         if (postIndex !== -1) {
           this.posts.splice(postIndex, 1);
+          this.filteredPosts = this.posts;
+          this.searchTerm = '';
         }
         this.successMessage = 'Post Deleted Successfully!';
         this.loadPosts();
